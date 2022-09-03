@@ -4,7 +4,6 @@ const loadAllProduct = async () => {
         const res = await fetch(url);
         const data = await res.json();
         return data.data.news_category;
-        // console.log(data.data.news_category);
     } catch (error) {
         console.log(error);
     }
@@ -13,7 +12,6 @@ const loadAllProduct = async () => {
 
 const setAllCategory = async () => {
     const data = await loadAllProduct()
-    // console.log(data);
 
     const allCategory = document.getElementById('all-category');
 
@@ -28,7 +26,7 @@ const setAllCategory = async () => {
 
             const li = document.createElement('li');
             li.innerHTML = `
-            <a onclick="loadAllNews('${category.category_id}')" class="nav-link">${category.category_name}</a>
+            <a onclick="loadAllNews('${category.category_id}')" class="nav-link btn btn-light">${category.category_name}</a>
             `;
             allCategory.appendChild(li);
         }
@@ -37,6 +35,7 @@ const setAllCategory = async () => {
 }
 
 setAllCategory();
+
 // spinner
 const toggleSpinner = isLoading => {
     const spinnerSection = document.getElementById('spinner');
@@ -46,3 +45,33 @@ const toggleSpinner = isLoading => {
         spinnerSection.classList.add('d-none')
     }
 }
+
+const loadAllNews = async category_id => {
+
+    // spinner start
+    toggleSpinner(true);
+
+    const url = `https://openapi.programming-hero.com/api/news/category/${category_id}`;
+
+    const res = await fetch(url);
+    const data = await res.json();
+    displayNewsItem(data.data);
+}
+const displayNewsItem = newsAll => {
+    // console.log('newsAll', newsAll);
+
+    //Sort in array
+    newsAll.sort((a, b) => {
+        return b.total_view - a.total_view;
+    });
+
+    const totalNewsCount = document.getElementById('total-news-count').innerHTML = `${newsAll.length} items found for category`;
+
+    //no-news-gategory
+    const noNewsGategory = document.getElementById('no-news-gategory');
+    if (newsAll.length === 0) {
+        noNewsGategory.classList.remove('d-none');
+    }
+    else {
+        noNewsGategory.classList.add('d-none');
+    }
