@@ -75,3 +75,56 @@ const displayNewsItem = newsAll => {
     else {
         noNewsGategory.classList.add('d-none');
     }
+    //All new Show
+    const newsContainer = document.getElementById('news-container');
+    newsContainer.textContent = '';
+    newsAll.forEach(news => {
+
+
+        const div = document.createElement('div');
+        div.innerHTML = `
+    <div class="container card mb-3"">
+    <div class="row g-0">
+    <div class="col-md-4">
+     <img src=${news.thumbnail_url}" class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8">
+     <div class="card-body">
+     <h5 class="card-title">${news.title ? news.title : 'Title not found'}</h5>
+     <p class="card-text">${news.details.length > 300 ? news.details.slice(0, 300) + '...' : news.details}</p>
+
+
+    
+     <div class="mb-3 mt-5" >
+        <div class="d-flex justify-content-between row g-0">
+            <div class="col-md-2">
+                <img src="${news.author.img ? news.author.img : 'Author Image not found'}" style="width: 50px; height: 50px;" class="rounded-circle" alt="...">
+            </div>
+            <div class="col-md-4">
+                <h5 class="title">${news.author.name ? news.author.name : 'Author is not found'}</h5>
+                <p class="text">${news.author.published_date ? news.author.published_date : 'Author Published date not found'}</p>
+
+            </div>
+
+            <div class="col-md-4">
+                <h5 class="title"><i class="fa-regular fa-eye"></i> ${news.total_view ? news.total_view : 'View is not found'}</h5>
+            </div>
+            <div class="col-md-2">
+                <h5 onclick="loadNewsDetails('${news._id}')" class="title" data-bs-toggle="modal" data-bs-target="#detailsModal"><i class="fa-solid fa-arrow-right"></i></h5>
+            </div>
+        </div>
+    </div>
+    
+
+  </div>
+</div>
+</div>
+</div>
+    `;
+        newsContainer.appendChild(div);
+    })
+
+    //Spinner stop
+    toggleSpinner(false);
+
+}
